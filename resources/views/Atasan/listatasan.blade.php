@@ -14,15 +14,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
             @foreach ($atasan as $item)
+          <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $item->name }}</td>
-                <td><a href="#" class="btn btn-sm btn-danger">Detail</a></td>
-            @endforeach
+                <td><a href="{{ route('detail',$item->id) }}" class="btn btn-sm btn-danger">Detail</a></td>
           </tr>
+          @endforeach
         </tbody>
       </table>
 </div>
-
 @endsection

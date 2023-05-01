@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('name');
             $table->string('NIP');
-            $table->enum('gender',['L','P']);
+            $table->enum('gender',['Male','Female']);
             $table->string('photo')->nullable();
             $table->string('jabatan');
             $table->rememberToken();

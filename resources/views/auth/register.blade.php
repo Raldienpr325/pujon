@@ -45,8 +45,15 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control form-control-user" name="gender" placeholder="{{ __('Gender') }}" required>
-                                    </div>
+                                        <div class="form-check">
+                                          <input type="radio" class="form-check-input" name="gender" id="male" value="Male" required>
+                                          <label for="male" class="form-check-label">Male</label>
+                                        </div>
+                                        <div class="form-check">
+                                          <input type="radio" class="form-check-input" name="gender" id="female" value="Female" required>
+                                          <label for="female" class="form-check-label">Female</label>
+                                        </div>
+                                      </div>
 
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
