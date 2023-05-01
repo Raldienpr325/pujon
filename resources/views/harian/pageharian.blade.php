@@ -1,280 +1,187 @@
 @extends('layouts.admin')
 
+@section('css')
+<meta name="csrf_token" content="{{ csrf_token() }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@endsection
+
 @section('main-content')
+    <div class="modal fade" id="laporanHarian" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Laporan Harian</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <label for="title">Aktivitas</label>
+                <input type="text" class="form-control" id="title">
+                <span id="titleError" class="text-danger"></span>
 
-<div class="form-group row">
-    <label for="bulan_tahun" class="col-md-4 col-form-label text-md-right">{{ __('Bulan') }}</label>
+                <label for="hasil">hasil</label>
+                <input type="text" class="form-control" id="hasil">
+                <span id="titleError" class="text-danger"></span>
 
-    <div class="col-md-6 d-flex align-items-center">
-        <select id="bulan" class="form-control @error('bulan') is-invalid @enderror mr-2" name="bulan" required>
-            <option value="01" {{ ($bulan === '01') ? 'selected' : '' }}>Jan</option>
-            <option value="02" {{ ($bulan === '02') ? 'selected' : '' }}>Feb</option>
-            <option value="03" {{ ($bulan === '03') ? 'selected' : '' }}>Mar</option>
-            <option value="04" {{ ($bulan === '04') ? 'selected' : '' }}>Apr</option>
-            <option value="05" {{ ($bulan === '05') ? 'selected' : '' }}>Mei</option>
-            <option value="06" {{ ($bulan === '06') ? 'selected' : '' }}>Jun</option>
-            <option value="07" {{ ($bulan === '07') ? 'selected' : '' }}>Jul</option>
-            <option value="08" {{ ($bulan === '08') ? 'selected' : '' }}>Agu</option>
-            <option value="09" {{ ($bulan === '09') ? 'selected' : '' }}>Sep</option>
-            <option value="10" {{ ($bulan === '10') ? 'selected' : '' }}>Okt</option>
-            <option value="11" {{ ($bulan === '11') ? 'selected' : '' }}>Nov</option>
-            <option value="12" {{ ($bulan === '12') ? 'selected' : '' }}>Des</option>
-        </select>
+                <label for="catatan">catatan</label>
+                <input type="text" class="form-control" id="catatan">
+                <span id="titleError" class="text-danger"></span>
 
-        <span class="">{{ __('Tahun') }}</span>
-        <input id="tahun" type="text" class="form-control @error('tahun') is-invalid @enderror ml-2" name="tahun" value="{{ $tahun }}" required>
+                <label for="kesimpulan">kesimpulan</label>
+                <input type="text" class="form-control" id="kesimpulan">
+                <span id="titleError" class="text-danger"></span>
 
-        @error('bulan')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
-        @error('tahun')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
+                <label for="keterangan">keterangan</label>
+                <input type="text" class="form-control" id="keterangan">
+                <span id="titleError" class="text-danger"></span>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="saveBtn">Simpan</button>
+              </div>
+            </div>
+          </div>
     </div>
-</div>
-<div class="row">
 
-<div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2" data-toggle="modal" data-target="#myModal1">
+    <div class="card shadow">
         <div class="card-body">
-            <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="mb-1 h1 mb-0 font-weight-bold text-primary">1</div>
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="col-md-11 offset-1 mt-5 mb-5">
+                  <div id="calendar"></div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
     </div>
-</div>
-
-<!-- Modal popup untuk card 1 -->
-<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Input Laporan Harian</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <form method="post" action="submit.php">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="tanggal1">Tanggal:</label>
-                        <input type="date" class="form-control" id="tanggal1" name="tanggal1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="jam1">Jam:</label>
-                        <input type="time" class="form-control" id="jam1" name="jam1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="aktivitas1">Aktivitas:</label>
-                        <textarea class="form-control" id="aktivitas1" name="aktivitas1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="hasil1">Hasil:</label>
-                        <textarea class="form-control" id="hasil1" name="hasil1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="catatan1">Catatan:</label>
-                        <textarea class="form-control" id="catatan1" name="catatan1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="kesimpulan1">Kesimpulan:</label>
-                        <textarea class="form-control" id="kesimpulan1" name="kesimpulan1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="keterangan1">Keterangan:</label>
-                        <textarea class="form-control" id="keterangan1" name="keterangan1" rows="3" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2" data-toggle="modal" data-target="#myModal1">
-        <div class="card-body">
-            <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="mb-1 h1 mb-0 font-weight-bold text-primary">2</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal popup untuk card 1 -->
-<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Input Laporan Harian</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <form method="post" action="submit.php">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="tanggal1">Tanggal:</label>
-                        <input type="date" class="form-control" id="tanggal1" name="tanggal1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="jam1">Jam:</label>
-                        <input type="time" class="form-control" id="jam1" name="jam1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="aktivitas1">Aktivitas:</label>
-                        <textarea class="form-control" id="aktivitas1" name="aktivitas1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="hasil1">Hasil:</label>
-                        <textarea class="form-control" id="hasil1" name="hasil1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="catatan1">Catatan:</label>
-                        <textarea class="form-control" id="catatan1" name="catatan1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="kesimpulan1">Kesimpulan:</label>
-                        <textarea class="form-control" id="kesimpulan1" name="kesimpulan1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="keterangan1">Keterangan:</label>
-                        <textarea class="form-control" id="keterangan1" name="keterangan1" rows="3" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2" data-toggle="modal" data-target="#myModal1">
-        <div class="card-body">
-            <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="mb-1 h1 mb-0 font-weight-bold text-primary">3</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal popup untuk card 1 -->
-<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Input Laporan Harian</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <form method="post" action="submit.php">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="tanggal1">Tanggal:</label>
-                        <input type="date" class="form-control" id="tanggal1" name="tanggal1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="jam1">Jam:</label>
-                        <input type="time" class="form-control" id="jam1" name="jam1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="aktivitas1">Aktivitas:</label>
-                        <textarea class="form-control" id="aktivitas1" name="aktivitas1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="hasil1">Hasil:</label>
-                        <textarea class="form-control" id="hasil1" name="hasil1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="catatan1">Catatan:</label>
-                        <textarea class="form-control" id="catatan1" name="catatan1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="kesimpulan1">Kesimpulan:</label>
-                        <textarea class="form-control" id="kesimpulan1" name="kesimpulan1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="keterangan1">Keterangan:</label>
-                        <textarea class="form-control" id="keterangan1" name="keterangan1" rows="3" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2" data-toggle="modal" data-target="#myModal1">
-        <div class="card-body">
-            <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="mb-1 h1 mb-0 font-weight-bold text-primary">4</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal popup untuk card 1 -->
-<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Input Laporan Harian</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <form method="post" action="submit.php">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="tanggal1">Tanggal:</label>
-                        <input type="date" class="form-control" id="tanggal1" name="tanggal1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="jam1">Jam:</label>
-                        <input type="time" class="form-control" id="jam1" name="jam1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="aktivitas1">Aktivitas:</label>
-                        <textarea class="form-control" id="aktivitas1" name="aktivitas1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="hasil1">Hasil:</label>
-                        <textarea class="form-control" id="hasil1" name="hasil1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="catatan1">Catatan:</label>
-                        <textarea class="form-control" id="catatan1" name="catatan1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="kesimpulan1">Kesimpulan:</label>
-                        <textarea class="form-control" id="kesimpulan1" name="kesimpulan1" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="keterangan1">Keterangan:</label>
-                        <textarea class="form-control" id="keterangan1" name="keterangan1" rows="3" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-</div>
 
 
 @endsection
+
+@section('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
+            },
+        });
+
+        var event = @json($events);
+        $('#calendar').fullCalendar({
+            header:{
+                left : 'prev next today',
+                center : 'title',
+                right : 'month, agendaWeek, agendaDay',
+            },
+            events : event,
+            selectable :true,
+            selectHelper:true,
+            select:function(start,end, allDays){
+                $('#laporanHarian').modal('toggle');
+
+                $('#saveBtn').click(function(){
+                    var title = $('#title').val()
+                    var hasil = $('#hasil').val()
+                    var catatan = $('#catatan').val()
+                    var kesimpulan = $('#kesimpulan').val()
+                    var keterangan = $('#keterangan').val()
+                    var start_date = moment(start).format('YYYY-MM-DD');
+                    var end_date = moment(end).format('YYYY-MM-DD');
+
+
+                    $.ajax({
+                        url:"{{ route('pageharian.store') }}",
+                        type:'POST',
+                        dataType:'json',
+                        data:{
+                            start_date,end_date,title,hasil,kesimpulan,catatan,keterangan
+                        },
+                        success:function(response){
+                            $('#laporanHarian').modal('hide')
+                            swal("Laporan berhasil ditambahkan", "", "success");
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 1500);
+                        },error:function(err){
+                            console.log(err)
+                        }
+                    })
+                })
+            },
+            editable:true,
+            eventDrop:function(event){
+                var id = event.id;
+                var start_date = moment(event.start).format('YYYY-MM-DD');
+                var end_date = moment(event.end).format('YYYY-MM-DD');
+
+                $.ajax({
+                        url:"{{ route('pageharian.update','') }}"+'/'+id,
+                        type:'PATCH',
+                        dataType:'json',
+                        data:{
+                            start_date,end_date
+                        },
+                        success:function(response){
+                            swal("Berhasil", "Laporan berhasil diupdate", "success");
+                        },error:function(err){
+                            console.log(err)
+                        }
+                    });
+            },
+            eventClick: function(event){
+                var id = event.id
+                swal({
+                    title: "Ingin menghapus laporan?",
+                    icon: "warning",
+                    buttons: {
+                        cancel: "Batal",
+                        confirm: {
+                            text: "Ya, hapus!",
+                            value: true,
+                            visible: true,
+                            className: "btn btn-danger",
+                            closeModal: false,
+                        },
+                    },
+                }).then((isConfirm) => {
+                    if (isConfirm) {
+                        $.ajax({
+                            url:"{{ route('pageharian.destroy','') }}"+'/'+id,
+                            type:'DELETE',
+                            dataType:'json',
+                            success:function(response){
+                                $('#calendar').fullCalendar('removeEvents',response);
+                                swal("Laporan berhasil dihapus", "", "success");
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 1500);
+                            },error:function(err){
+                                console.log(err)
+                            }
+                        });
+                    }
+                });
+            }
+        })
+    });
+</script>
+@endsection
+
+
+
 
 
 

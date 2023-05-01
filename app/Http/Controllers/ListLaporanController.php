@@ -14,8 +14,8 @@ class ListLaporanController extends Controller
      */
     public function index()
     {
-        $laporans = Laporanharian::all();
-        return view('list.pagelist', ['laporans' => $laporans]);
+        $laporans = Laporanharian::paginate(5);
+        return view('list.pagelist', compact('laporans'));
     }
 
     /**

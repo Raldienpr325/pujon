@@ -2,39 +2,27 @@
 
 @section('main-content')
     <!-- Page Heading -->
-    
-    <h1 class="mb-1 h1 mb-0 font-weight-bold text-success mb-4">{{ __('List Atasan') }}</h1>
+<div class="card">
+    <h1 class="mb-1 h1 mb-0 font-weight-bold mb-4" style="margin-top: 10px; margin-left: 3.1%;">{{ __('List Atasan') }}</h1>
 
-     <!-- Earnings (Monthly) Card Example -->
-     <div class="row justify-content-center">
-<div class="form-group" style="width: 100%; height: 2%; margin-left: 2.2%;">
-        <div class="card border-left-success shadow h-100 py-0">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                    <label for="nama" class="mb-1 h4 mb-0 font-weight-bold text-success">{{ Auth::user()->fullName }}</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="form-group" style="width: 100%; height: 2%; margin-left: 2.2%;">
-        <div class="card border-left-success shadow h-100 py-0">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="mb-1 h4 mb-0 font-weight-bold text-success">nama atasan</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-  
-                </div>
-            </div>
-
-        </div>
-
-    </div>
+    <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nama</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            @foreach ($atasan as $item)
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $item->name }}</td>
+                <td><a href="#" class="btn btn-sm btn-danger">Detail</a></td>
+            @endforeach
+          </tr>
+        </tbody>
+      </table>
+</div>
 
 @endsection

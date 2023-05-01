@@ -4,23 +4,23 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Laravel SB Admin 2">
-    <meta name="author" content="Alejandro RH">
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    @yield('css')
 
     <!-- Fonts -->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> --}}
 
     <!-- Favicon -->
     <link href="{{ asset('img/favicon.png') }}" rel="icon" type="image/png">
+    @stack('css')
 </head>
 <body id="page-top">
 
@@ -32,11 +32,11 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
     <div class="sidebar-brand-icon">
-        <img src="{{ asset('img/logo.png') }}" alt="Icon" style="width: 42px; margin-right: 7px;">                
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}"> 
+        <img src="{{ asset('img/komlogo.png') }}" alt="Icon" style="width: 42px; margin-right: 7px;">
+
     </div>
     <div class="sidebar-brand-text mx-1" style="text-align: left;">LAPORAN TENAGA HARIAN LEPAS</div>
-    
+
 </a>
 
         <!-- Divider -->
@@ -105,7 +105,7 @@
         <!-- Nav Item - About -->
         <li class="nav-item {{ Nav::isRoute('Pegawai') }}">
             <a class="nav-link" href="{{ route('Pegawai') }}">
-                <i class="fas fa-fw fa-hands-helping"></i>
+                <i class="fas fa-users fa-2x "></i>
                 <span>{{ __('Pegawai') }}</span>
             </a>
         </li>
@@ -169,7 +169,7 @@
                         </div>
                     </li>
 
- 
+
                     <div class="topbar-divider d-none d-sm-block"></div>
 
                     <!-- Nav Item - User Information -->
@@ -220,7 +220,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Alejandro RH {{ now()->year }}</span>
+                    <span>Pemerintahan Kota Batu {{ now()->year }}</span>
                 </div>
             </div>
         </footer>
@@ -263,5 +263,9 @@
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+@yield('js')
+
+
 </body>
 </html>

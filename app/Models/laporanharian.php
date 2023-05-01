@@ -10,16 +10,9 @@ class Laporanharian extends Model
 {
     use HasFactory;
 
-    protected $table = 'laporanharians';
+    protected $table = 'laporans';
 
     protected $fillable = [
-        'hari',
-        'jam',
-        'aktivitas',
-        'catatan',
-        'hasil',
-        'kesimpulan',
-        'keterangan',
-        'status_verifikasi',
+        'title','hasil','kesimpulan','catatan','keterangan','start_date','end_date'
     ];
 }

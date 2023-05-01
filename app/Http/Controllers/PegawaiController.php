@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class PegawaiController extends Controller
 {
@@ -13,7 +14,8 @@ class PegawaiController extends Controller
      */
     public function index()
     {
-        return view('Pegawai.listpegawai');
+        $pegawai = User::where('jabatan','=','pegawai')->get();
+        return view('Pegawai.listpegawai',compact('pegawai'));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AtasanController extends Controller
@@ -13,7 +14,10 @@ class AtasanController extends Controller
      */
     public function index()
     {
-        return view('Atasan.listatasan');
+        $atasan = User::where('jabatan','=','atasan')->get();
+        return view('Atasan.listatasan',compact([
+            'atasan'
+        ]));
     }
 
     /**

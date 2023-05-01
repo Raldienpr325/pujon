@@ -24,13 +24,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $users = User::count();
+        $countPegawai = User::where('jabatan','=','pegawai')->count();
+        $countAtasan = User::where('jabatan','=','atasan')->count();
 
-        $widget = [
-            'users' => $users,
-            //...
-        ];
+        return view('home', compact([
+            'countPegawai',
+            'countAtasan',
+        ]));
+    }
 
-        return view('home', compact('widget'));
+    public function detail($id){
+        $data = User::findOrFail($id)->first();
+        // dd($data);
+        return view('Detail.index',compact('data'));
     }
 }
